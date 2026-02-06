@@ -12,11 +12,20 @@ public class PackCollectionManager : MonoBehaviour
       instance = this;  
     }
 
-    public List<CardPackData> cardPacks;
+    public List<CardPackData> fullPackCollection;
+    public List<CardData> fullCardCollection;
+    
     // Start is called before the first frame update
     void Start()
     {
-        cardPacks = CardCollectionManager.instance.fullPackCollection;
+        fullCardCollection = CardCollectionManager.instance.fullCardCollection;
+
+      //generate card packs
+        GeneratePackCollection();
+        foreach(CardPackData pack in fullPackCollection)
+        {
+            SetUpPack(pack);
+        }
     }
 
     // Update is called once per frame
@@ -47,5 +56,23 @@ public class PackCollectionManager : MonoBehaviour
     public void CheckIfDiscovered()
     {
         
+    }
+    private void GeneratePackCollection()
+    {
+        CardPackData[] packs = Resources.LoadAll<CardPackData>("Scriptables/Card Packs");
+        fullPackCollection.AddRange(packs);
+
+        Debug.Log($"loaded {fullPackCollection.Count} card packs");
+    }
+
+    private void SetUpPack(CardPackData pack)
+    {
+        foreach(CardData card in fullCardCollection)
+        {
+            if(card.packName == pack.packName)
+            {
+                pack.cardsInPack.Add(card);
+            }
+        }
     }
 }

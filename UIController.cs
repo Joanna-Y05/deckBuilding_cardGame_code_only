@@ -100,24 +100,6 @@ public class UIController : MonoBehaviour
         AudioManager.Instance.PlaySFX(3);
     }
 
-    //shop UI stuff
-
-    /*
-    text 1 = welcome to the shop what can i get for you today
-
-    text 2 = when an object is selected the shop owner should say so you want so and so pack that will be 
-    but this text will alternate based on an array of appriorite responses
-    (1) so you want the [card pack name], i guess i can give u a discount, that will be [pack cost]
-    (2) ah the [card pack name], it has been getting more popular recently, its usually [pack cost + 5] but for you i will do it for [pack cost]
-    (3) are you sure you want the [card pack name], its not very popular may be hard to make connections with... fine i will sell it for [pack cost]
-    (4) the [card pack name]? hmm i will sell it to you for [pack cost]
-    (5) ah the [card pack name], i've been wanting to get rid of that one for a while, i sell it to you for [pack cost]
-
-    text 3 = when a pack is bought 
-    thank you for buying a pack hope it helps you win 
-
-    text 4 = closing the shop
-    well then, till next time happy playing
-    */
+    
 
 }

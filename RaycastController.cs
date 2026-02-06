@@ -68,27 +68,28 @@ public class RaycastController : MonoBehaviour
             {
                 Debug.Log("collection pressed");
             }
-        }  
-        else if (!gameStarted && !ShopManager.instance.shopOpen)
+        } 
+
+        if (!gameStarted || !ShopManager.instance.shopOpen)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 1000f, whatIsDesk))
             {
                 startText.SetActive(true);
-                Debug.Log("desk hovered");
+                //Debug.Log("desk hovered");
             }
 
             else if (Physics.Raycast(ray, out hit, 1000f, whatIsShop))
             {
                 shopText.SetActive(true);
-                Debug.Log("shop hovered");
+                //Debug.Log("shop hovered");
             }
 
             else if(Physics.Raycast(ray, out hit, 1000f, whatIsCollection))
             {
                 collectionText.SetActive(true);
-                Debug.Log("collection hovered");
+                //Debug.Log("collection hovered");
             }
             else
             {
@@ -96,6 +97,12 @@ public class RaycastController : MonoBehaviour
                 shopText.SetActive(false);
                 collectionText.SetActive(false);
             }
-        }  
+        }
+        else
+        {
+            startText.SetActive(false);
+            shopText.SetActive(false);
+            collectionText.SetActive(false);
+        }
     }
 }

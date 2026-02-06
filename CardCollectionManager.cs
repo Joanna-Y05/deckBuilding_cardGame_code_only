@@ -14,17 +14,9 @@ public class CardCollectionManager : MonoBehaviour
         //generate deck
         GenerateFullCollection();
         GenerateIDs();
-
-        //generate card packs
-        GeneratePackCollection();
-        foreach(CardPackData pack in fullPackCollection)
-        {
-            SetUpPack(pack);
-        }
     }
 
     public List<CardData> fullCardCollection;
-    public List<CardPackData> fullPackCollection;
 
     public List<CardData> playerCollection;
     public List<CardData> shopCollection;
@@ -92,11 +84,11 @@ public class CardCollectionManager : MonoBehaviour
     }
 
     //when a card is bought remove from shop
-    public void RemoveFromShopCollection(int cardID)
+    public void RemoveFromShopCollection(CardData cardToRemove)
     {
         for(int i = 0; i < shopCollection.Count; i++)
         {
-            if(shopCollection[i].cardID == cardID)
+            if(shopCollection[i] == cardToRemove)
             {
                 Debug.Log(shopCollection[i].cardName + " removed from shop collection");
                 shopCollection.RemoveAt(i);
@@ -126,24 +118,5 @@ public class CardCollectionManager : MonoBehaviour
             fullCardCollection[i].cardID = i;
         }
         Debug.Log($"{fullCardCollection.Count} IDs generated for deck");
-    }
-
-    private void GeneratePackCollection()
-    {
-        CardPackData[] packs = Resources.LoadAll<CardPackData>("Scriptables/Card Packs");
-        fullPackCollection.AddRange(packs);
-
-        Debug.Log($"loaded {fullPackCollection.Count} card packs");
-    }
-
-    private void SetUpPack(CardPackData pack)
-    {
-        foreach(CardData card in fullCardCollection)
-        {
-            if(card.packName == pack.packName)
-            {
-                pack.cardsInPack.Add(card);
-            }
-        }
     }
 }
