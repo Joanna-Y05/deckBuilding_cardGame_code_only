@@ -11,7 +11,7 @@ public class DeckController : MonoBehaviour
         instance = this;
     }
 
-    public List<CardData> deckToUse = new List<CardData>();
+    public List<CardData> deckToUse;
     public List<CardData> activeCards = new List<CardData>();
     public Card cardToSpawn;
     public int drawCardCost = 1;
@@ -33,6 +33,7 @@ public class DeckController : MonoBehaviour
     }
     public void SetupDeck()
     {
+        deckToUse = CardCollectionManager.instance.playerCollection;
         activeCards.Clear();
 
         List<CardData> tempDeck = new List<CardData>();

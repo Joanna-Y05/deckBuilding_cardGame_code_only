@@ -216,7 +216,7 @@ public class ShopManager : MonoBehaviour
         //buy cards
         //CardPack newPack = Instantiate(selectedPack, transform.position, Quaternion.Euler(0f, 270f, 270f));
         GeneralText(1);
-        TriggerBuyPanel();
+        StartCoroutine(TriggerBuyPanel());
 
         foreach(CardData card in selectedPack.cardsInPack)
         {
@@ -323,12 +323,15 @@ public class ShopManager : MonoBehaviour
         foreach (CardData card in selectedPack.cardsInPack)
         {
             s.Add(card.cardName.ToString() + ",");
-            s.Add("\n");
         }
 
         // need to add text implementation so it changes the text on the buy panel
 
-        yield return new WaitForSeconds(6f);
+        cardBoughtText.text = string.Join("\n",s);
+
+        yield return new WaitForSeconds(3f);
+
+        BoughtCardPanel.SetActive(false);
 
     }
 }

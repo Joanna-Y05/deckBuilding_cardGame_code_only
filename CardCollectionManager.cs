@@ -27,8 +27,16 @@ public class CardCollectionManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerCollection.Clear();
+        enemyCollection.Clear();
+        shopCollection.Clear();
+
         foreach(CardData card in fullCardCollection)
         {
+            //forgets any changes and sets back to default
+            card.cardState = CardState.None;
+            card.cardState = card.defaultState;
+
             //add to playercollection
             if(card.cardState == CardState.owned)
             {
@@ -42,11 +50,15 @@ public class CardCollectionManager : MonoBehaviour
             }
 
             //add to enemy deck
-            else if(card.cardState == CardState.InShop)
+            else if(card.cardState == CardState.EnemyOwned)
             {
                 enemyCollection.Add(card);
             }
         }
+
+        Debug.Log($"added {playerCollection.Count} cards to player collection");
+        Debug.Log($"added {shopCollection.Count} cards to shop collection");
+        Debug.Log($"added {enemyCollection.Count} cards to enemy collection");
 
         //then update any special enemy decks this will require more logic for 
         //instance adding a sorted bool where it will first check if the card is sorted before adding it to the enemy deck
@@ -105,6 +117,7 @@ public class CardCollectionManager : MonoBehaviour
 
     private void GenerateFullCollection()
     {
+        fullCardCollection.Clear();
         CardData[] cards = Resources.LoadAll<CardData>("Scriptables/Cards");
         fullCardCollection.AddRange(cards);
 

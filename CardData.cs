@@ -24,6 +24,7 @@ public class CardData : ScriptableObject
     public List<CardEffect> additionalEffects;
 
     [Header("State")]
+    public CardState defaultState;
     public CardState cardState = CardState.Found;
 
     [Header("Visuals")]

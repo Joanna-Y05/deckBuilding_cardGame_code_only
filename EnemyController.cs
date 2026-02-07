@@ -14,7 +14,7 @@ public class EnemyController : MonoBehaviour
         instance = this;
     }
 
-    public List<CardData> deckToUse = new List<CardData>();
+    public List<CardData> deckToUse;
     public List<CardData> activeCards = new List<CardData>();
 
     public Card cardToSpawn;
@@ -29,6 +29,7 @@ public class EnemyController : MonoBehaviour
 
     public void StartGame()
     {
+
         SetupDeck();
         if (enemyAIType != AIType.placeFromDeck)
         {
@@ -44,6 +45,7 @@ public class EnemyController : MonoBehaviour
 
     public void SetupDeck()
     {
+        deckToUse = CardCollectionManager.instance.enemyCollection;
         activeCards.Clear();
 
         List<CardData> tempDeck = new List<CardData>();
