@@ -4,6 +4,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SocialPlatforms.Impl;
 using Unity.VisualScripting;
+using Unity.Mathematics;
+using UnityEngine.UIElements;
+using UnityEditor;
 
 public class UIController : MonoBehaviour
 {
@@ -19,11 +22,14 @@ public class UIController : MonoBehaviour
     public GameObject drawCardButton, endTurnButton,movesLeftText;
 
     [Header("Game Over screen UI")]
-    public GameObject gameOverScreen;
+    public GameObject gameOverScreen, mainUI, deck;
     public TMP_Text playerCardsText, enemyCardsText, playerScoreText, enemyScoreText, resultText;
 
     [Header("Shop UI")]
     public TMP_Text textField;
+
+    [Header("other UI")]
+    public GameObject mainMenuUI;
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +43,10 @@ public class UIController : MonoBehaviour
         if(BattleController.instance.battleEnded == true)
         {
             GameOver();
+        }
+        else
+        {
+            gameOverScreen.SetActive(false);
         }
     }
 
@@ -65,7 +75,7 @@ public class UIController : MonoBehaviour
     }
     IEnumerator GameOverCo()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(0f);
 
         gameOverScreen.SetActive(true);
         
@@ -88,18 +98,91 @@ public class UIController : MonoBehaviour
     public void MainMenu()
     {
         AudioManager.Instance.PlaySFX(3);
+        mainMenuUI.SetActive(true);
+        CameraMovementSystem.instance.MenuCamFocus();
+
     }
 
-    public void RestartLevel()
+    public void Continue()
     {
         AudioManager.Instance.PlaySFX(3);
+        //this will be the reset function
+        CameraMovementSystem.instance.MainCamFocus();
+        CardPointController.instance.EmptySpaces();
+        RaycastController.instance.gameStarted = false;
+        BattleController.instance.battleEnded = false;
+        CardCollectionManager.instance.ResetPower();
+        gameOverScreen.SetActive(false);
+        CameraMovementSystem.instance.card_gameUI.SetActive(false);
+        Debug.Log("player chose to continue");
     }
 
-    public void ChooseNewBattle()
+    public void OpenDeck()
     {
-        AudioManager.Instance.PlaySFX(3);
+        deck.SetActive(true);
+        SetCardPositionsInDeck();
     }
-
     
+    public void CloseDeck()
+    {
+        DeckSlot[] exsistingSlots = FindObjectsOfType<DeckSlot>();
+        foreach(DeckSlot deck in exsistingSlots)
+        {
+            Destroy(deck.gameObject);
+        }
+        cards.Clear();
+        deck.SetActive(false);
+    }
+
+
+    [Header("deck slot settings")]
+    private List<Vector3> cardPositions = new List<Vector3>();
+    public Transform minPos, maxPos;
+    private List<CardData> heldCards;
+    public List<DeckSlot> cards;
+    public DeckSlot deckSlot;
+    
+    
+
+
+    public void SetCardPositionsInDeck()
+    {
+        heldCards = CardCollectionManager.instance.playerDeck;
+
+        cardPositions.Clear();
+        cards.Clear();
+
+        foreach (CardData data in heldCards)
+        {
+            DeckSlot newSlot = Instantiate(deckSlot, transform);
+            newSlot.data = data;
+            newSlot.power.text = data.currentPower.ToString();
+            newSlot.cardName.text = data.cardName;
+
+            cards.Add(newSlot);
+
+        }
+
+        Vector3 distanceBetweenPoints = Vector3.zero;
+        if (cards.Count > 1)
+        {
+            distanceBetweenPoints = (maxPos.localPosition - minPos.localPosition) / (heldCards.Count - 1);
+        }
+        for (int i = 0; i < cards.Count; i++)
+        {
+            cardPositions.Add(minPos.localPosition + (distanceBetweenPoints * i));
+
+            //heldCards[i].transform.position = cardPositions[i];
+            //heldCards[i].transform.rotation = minPos.rotation;
+
+            //this will set where the card should be and its rotation
+
+            cards[i].transform.localPosition = cardPositions[i];
+
+            //heldCards[i].MoveToPoint(cardPositions[i], minPos.rotation);
+            //heldCards[i].inHand = true;
+            //heldCards[i].handPosition = i;
+        }
+    }
 
 }
